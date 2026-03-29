@@ -73,6 +73,12 @@ export async function getReports() {
   return res.json();
 }
 
+export async function getCycleAnalysis() {
+  const res = await fetch(`${BASE}/cycle`, { headers: authHeaders() });
+  if (!res.ok) throw await res.json();
+  return res.json();
+}
+
 export function logout() {
   localStorage.removeItem("femtwin_token");
 }

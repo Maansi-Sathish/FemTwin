@@ -1,3 +1,16 @@
+import os
+from dotenv import load_dotenv
+
+# Load .env FIRST — before any app module imports genai or uses env vars
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), ".env"))
+
+# Verify key loaded
+_key = os.getenv("GEMINI_API_KEY")
+if _key:
+    print(f"[main.py] ✅ GEMINI_API_KEY loaded: {_key[:8]}...")
+else:
+    print("[main.py] ❌ GEMINI_API_KEY missing — check backend/.env")
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database.db import engine
