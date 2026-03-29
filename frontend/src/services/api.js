@@ -1,7 +1,5 @@
 const BASE = "http://localhost:8000";
-
 const getToken = () => localStorage.getItem("femtwin_token");
-
 const authHeaders = () => ({
   "Content-Type": "application/json",
   Authorization: `Bearer ${getToken()}`,
@@ -9,8 +7,7 @@ const authHeaders = () => ({
 
 export async function register(data) {
   const res = await fetch(`${BASE}/auth/register`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+    method: "POST", headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
   if (!res.ok) throw await res.json();
@@ -19,8 +16,7 @@ export async function register(data) {
 
 export async function login(email, password) {
   const res = await fetch(`${BASE}/auth/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+    method: "POST", headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
   });
   if (!res.ok) throw await res.json();
@@ -37,8 +33,7 @@ export async function getMe() {
 
 export async function updateMe(data) {
   const res = await fetch(`${BASE}/auth/me`, {
-    method: "PATCH",
-    headers: authHeaders(),
+    method: "PATCH", headers: authHeaders(),
     body: JSON.stringify(data),
   });
   if (!res.ok) throw await res.json();
@@ -47,8 +42,7 @@ export async function updateMe(data) {
 
 export async function analyzeHealth(symptoms) {
   const res = await fetch(`${BASE}/analyze`, {
-    method: "POST",
-    headers: authHeaders(),
+    method: "POST", headers: authHeaders(),
     body: JSON.stringify(symptoms),
   });
   if (!res.ok) throw await res.json();
@@ -57,6 +51,24 @@ export async function analyzeHealth(symptoms) {
 
 export async function getHistory() {
   const res = await fetch(`${BASE}/history`, { headers: authHeaders() });
+  if (!res.ok) throw await res.json();
+  return res.json();
+}
+
+export async function uploadReport(file) {
+  const formData = new FormData();
+  formData.append("file", file);
+  const res = await fetch(`${BASE}/upload-report`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${getToken()}` },
+    body: formData,
+  });
+  if (!res.ok) throw await res.json();
+  return res.json();
+}
+
+export async function getReports() {
+  const res = await fetch(`${BASE}/reports`, { headers: authHeaders() });
   if (!res.ok) throw await res.json();
   return res.json();
 }
